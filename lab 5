@@ -1,0 +1,116 @@
+#include <iostream>
+using namespace std;
+
+class Queue {
+private:
+    int *arr;
+    int frontIndex, rearIndex, size;
+
+public:
+    // Constructor
+    Queue(int s) {
+        size = s;
+        arr = new int[size];
+        frontIndex = 0;
+        rearIndex = -1;
+    }
+
+    // Check if queue is empty
+    bool isEmpty() {
+        return frontIndex > rearIndex;
+    }
+
+    // Check if queue is full
+    bool isFull() {
+        return rearIndex == size - 1;
+    }
+
+    // Enqueue operation
+    void enqueue(int x) {
+        if (isFull()) {
+            cout << "Queue Overflow\n";
+        } else {
+            arr[++rearIndex] = x;
+            cout << x << " inserted into queue\n";
+        }
+    }
+
+    // Dequeue operation
+    int dequeue() {
+        if (isEmpty()) {
+            cout << "Queue Underflow\n";
+            return -1;
+        } else {
+            return arr[frontIndex++];
+        }
+    }
+
+    // Front element
+    int front() {
+        if (isEmpty()) {
+            cout << "Queue is empty\n";
+            return -1;
+        }
+        return arr[frontIndex];
+    }
+
+    // Display all queue elements
+    void display() {
+        if (isEmpty()) {
+            cout << "Queue is empty\n";
+        } else {
+            cout << "Queue elements: ";
+            for (int i = frontIndex; i <= rearIndex; i++) {
+                cout << arr[i] << " ";
+            }
+            cout << "\n";
+        }
+    }
+};
+
+int main() {
+    int size, choice, value;
+
+    cout << "Enter size of queue: ";
+    cin >> size;
+
+    Queue q(size);
+
+    while (true) {
+        cout << "\n--- Queue Menu ---\n";
+        cout << "1. Enqueue\n";
+        cout << "2. Dequeue\n";
+        cout << "3. Front\n";
+        cout << "4. Display\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            cout << "Enter value to insert: ";
+            cin >> value;
+            q.enqueue(value);
+            break;
+
+        case 2:
+            cout << "Deleted: " << q.dequeue() << "\n";
+            break;
+
+        case 3:
+            cout << "Front element: " << q.front() << "\n";
+            break;
+
+        case 4:
+            q.display();
+            break;
+
+        case 5:
+            cout << "Exiting...\n";
+            return 0;
+
+        default:
+            cout << "Invalid choice!\n";
+        }
+    }
+}
