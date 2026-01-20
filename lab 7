@@ -1,0 +1,191 @@
+#include <iostream>
+using namespace std;
+
+// Node structure
+struct Student {
+    int id;
+    string name;
+    int age;
+    Student* prev;
+    Student* next;
+};
+
+class StudentList {
+private:
+    Student* head;
+
+public:
+    StudentList() {
+        head = NULL;
+    }
+
+    // Insert student at end
+    void insertStudent(int id, string name, int age) {
+        Student* newNode = new Student();
+        newNode->id = id;
+        newNode->name = name;
+        newNode->age = age;
+        newNode->prev = NULL;
+        newNode->next = NULL;
+
+        if (head == NULL) {
+            head = newNode;
+            cout << "Student inserted successfully.\n";
+            return;
+        }
+
+        Student* temp = head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+
+        temp->next = newNode;
+        newNode->prev = temp;
+        cout << "Student inserted successfully.\n";
+    }
+
+    // Delete student by ID
+    void deleteStudent(int id) {
+        if (head == NULL) {
+            cout << "List is empty. Cannot delete.\n";
+            return;
+        }
+
+        Student* temp = head;
+
+        while (temp != NULL && temp->id != id) {
+            temp = temp->next;
+        }
+
+        if (temp == NULL) {
+            cout << "Student not found.\n";
+            return;
+        }
+
+        if (temp == head) {
+            head = temp->next;
+            if (head != NULL)
+                head->prev = NULL;
+        } else {
+            temp->prev->next = temp->next;
+            if (temp->next != NULL)
+                temp->next->prev = temp->prev;
+        }
+
+        delete temp;
+        cout << "Student deleted successfully.\n";
+    }
+
+    // Search student by ID
+    void searchStudent(int id) {
+        if (head == NULL) {
+            cout << "List is empty.\n";
+            return;
+        }
+
+        Student* temp = head;
+        while (temp != NULL) {
+            if (temp->id == id) {
+                cout << "Student Found!\n";
+                cout << "ID: " << temp->id << endl;
+                cout << "Name: " << temp->name << endl;
+                cout << "Age: " << temp->age << endl;
+                return;
+            }
+            temp = temp->next;
+        }
+
+        cout << "Student not found.\n";
+    }
+
+    // Count students
+    int countStudents() {
+        int count = 0;
+        Student* temp = head;
+
+        while (temp != NULL) {
+            count++;
+            temp = temp->next;
+        }
+
+        return count;
+    }
+
+    // Display students
+    void display() {
+        if (head == NULL) {
+            cout << "No students in the list.\n";
+            return;
+        }
+
+        Student* temp = head;
+        cout << "\nStudent Records:\n";
+        while (temp != NULL) {
+            cout << "ID: " << temp->id
+                 << ", Name: " << temp->name
+                 << ", Age: " << temp->age << endl;
+            temp = temp->next;
+        }
+    }
+};   // ✅ class properly closed here
+
+// Main function
+int main() {
+    StudentList list;
+    int choice, id, age;
+    string name;
+
+    do {
+        cout << "\n--- Student Management System ---\n";
+        cout << "1. Insert Student\n";
+        cout << "2. Delete Student\n";
+        cout << "3. Search Student\n";
+        cout << "4. Count Students\n";
+        cout << "5. Display Students\n";
+        cout << "6. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter Student ID: ";
+                cin >> id;
+                cout << "Enter Name: ";
+                cin >> name;
+                cout << "Enter Age: ";
+                cin >> age;
+                list.insertStudent(id, name, age);
+                break;
+
+            case 2:
+                cout << "Enter Student ID to delete: ";
+                cin >> id;
+                list.deleteStudent(id);
+                break;
+
+            case 3:
+                cout << "Enter Student ID to search: ";
+                cin >> id;
+                list.searchStudent(id);
+                break;
+
+            case 4:
+                cout << "Total Students: " << list.countStudents() << endl;
+                break;
+
+            case 5:
+                list.display();
+                break;
+
+            case 6:
+                cout << "Exiting program...\n";
+                break;
+
+            default:
+                cout << "Invalid choice!\n";
+        }
+
+    } while (choice != 6);
+
+    return 0;
+}
